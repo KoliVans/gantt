@@ -378,7 +378,7 @@ export default class Arrow {
                 const parent_bar = line.parentNode.dataset.from;
                 const child_bar = line.parentNode.dataset.to;
                 const index_of_task =
-                    this.to_task.task.dependencies.indexOf(parent_bar);
+                    this.to_task.task.id;
                     this.gantt.trigger_event('open_popup_arrow', [
                         parent_bar,
                         child_bar,

@@ -5,6 +5,7 @@ import Arrow from './arrow';
 import Popup from './popup';
 
 import './gantt.scss';
+import {log} from "rollup-plugin-sass/dist/utils";
 
 const VIEW_MODE = {
     QUARTER_DAY: 'Quarter Day',
@@ -94,19 +95,27 @@ export default class Gantt {
     setup_tasks(tasks) {
         // prepare tasks
         this.tasks = tasks.map((task, i) => {
-            // convert to Date objects
             task._start = date_utils.parse(task.start);
             task._end = date_utils.parse(task.end);
 
-            // make task invalid if duration too large
+            if (!task._start || isNaN(task._start.getTime())) {
+                task._start = date_utils.today();
+            }
+            if (!task._end || isNaN(task._end.getTime())) {
+                task._end = date_utils.add(task._start, 2, 'day');
+            }
+
             if (date_utils.diff(task._end, task._start, 'year') > 10) {
                 task.end = null;
             }
 
-            // cache index
             task._index = i;
 
-            // invalid dates
+            const task_end_values = date_utils.get_date_values(task._end);
+            if (task_end_values.slice(3).every((d) => d === 0)) {
+                task._end = date_utils.add(task._end, 24, 'hour');
+            }
+
             if (!task.start && !task.end) {
                 const today = date_utils.today();
                 task._start = today;
@@ -121,19 +130,10 @@ export default class Gantt {
                 task._end = date_utils.add(task._start, 2, 'day');
             }
 
-            // if hours is not set, assume the last day is full day
-            // e.g: 2018-09-09 becomes 2018-09-09 23:59:59
-            const task_end_values = date_utils.get_date_values(task._end);
-            if (task_end_values.slice(3).every((d) => d === 0)) {
-                task._end = date_utils.add(task._end, 24, 'hour');
-            }
-
-            // invalid flag
             if (!task.start || !task.end) {
                 task.invalid = true;
             }
 
-            // dependencies
             if (typeof task.dependencies === 'string' || !task.dependencies) {
                 let deps = [];
                 if (task.dependencies) {
@@ -145,7 +145,6 @@ export default class Gantt {
                 task.dependencies = deps;
             }
 
-            // relationship_types
             if (
                 typeof task.relationship_options.type === 'string' ||
                 !task.relationship_options.type
@@ -160,7 +159,6 @@ export default class Gantt {
                 task.relationship_options.type = relationship_types;
             }
 
-            // uids
             if (!task.id) {
                 task.id = generate_id(task);
             }
@@ -825,20 +823,14 @@ export default class Gantt {
                     this.get_task(child_bar_id),
                     new_relation,
                 ]);
-                this.refresh(this.tasks);
-                bars.forEach((bar) => {
-                    const $bar = bar.$bar;
-                    if (!$bar.finaldx) return;
-                    bar.date_changed();
-                    bar.set_action_completed();
-                });
-                const updated_child_bar = this.get_bar(child_bar_id);
-                if (updated_child_bar) {
-                    updated_child_bar.update_bar_position({
-                        x: updated_child_bar.$bar.getX(),
-                        width: updated_child_bar.$bar.getWidth(),
-                    });
-                }
+
+                // const updated_child_bar = this.get_bar(child_bar_id);
+                // if (updated_child_bar) {
+                //     updated_child_bar.update_bar_position({
+                //         x: updated_child_bar.$bar.getX(),
+                //         width: updated_child_bar.$bar.getWidth(),
+                //     });
+                // }
             }
         });
 

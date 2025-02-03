@@ -1368,7 +1368,7 @@ var Gantt = (function () {
                     const parent_bar = line.parentNode.dataset.from;
                     const child_bar = line.parentNode.dataset.to;
                     const index_of_task =
-                        this.to_task.task.dependencies.indexOf(parent_bar);
+                        this.to_task.task.id;
                         this.gantt.trigger_event('open_popup_arrow', [
                             parent_bar,
                             child_bar,
@@ -1573,19 +1573,27 @@ var Gantt = (function () {
         setup_tasks(tasks) {
             // prepare tasks
             this.tasks = tasks.map((task, i) => {
-                // convert to Date objects
                 task._start = date_utils.parse(task.start);
                 task._end = date_utils.parse(task.end);
 
-                // make task invalid if duration too large
+                if (!task._start || isNaN(task._start.getTime())) {
+                    task._start = date_utils.today();
+                }
+                if (!task._end || isNaN(task._end.getTime())) {
+                    task._end = date_utils.add(task._start, 2, 'day');
+                }
+
                 if (date_utils.diff(task._end, task._start, 'year') > 10) {
                     task.end = null;
                 }
 
-                // cache index
                 task._index = i;
 
-                // invalid dates
+                const task_end_values = date_utils.get_date_values(task._end);
+                if (task_end_values.slice(3).every((d) => d === 0)) {
+                    task._end = date_utils.add(task._end, 24, 'hour');
+                }
+
                 if (!task.start && !task.end) {
                     const today = date_utils.today();
                     task._start = today;
@@ -1600,19 +1608,10 @@ var Gantt = (function () {
                     task._end = date_utils.add(task._start, 2, 'day');
                 }
 
-                // if hours is not set, assume the last day is full day
-                // e.g: 2018-09-09 becomes 2018-09-09 23:59:59
-                const task_end_values = date_utils.get_date_values(task._end);
-                if (task_end_values.slice(3).every((d) => d === 0)) {
-                    task._end = date_utils.add(task._end, 24, 'hour');
-                }
-
-                // invalid flag
                 if (!task.start || !task.end) {
                     task.invalid = true;
                 }
 
-                // dependencies
                 if (typeof task.dependencies === 'string' || !task.dependencies) {
                     let deps = [];
                     if (task.dependencies) {
@@ -1624,7 +1623,6 @@ var Gantt = (function () {
                     task.dependencies = deps;
                 }
 
-                // relationship_types
                 if (
                     typeof task.relationship_options.type === 'string' ||
                     !task.relationship_options.type
@@ -1639,7 +1637,6 @@ var Gantt = (function () {
                     task.relationship_options.type = relationship_types;
                 }
 
-                // uids
                 if (!task.id) {
                     task.id = generate_id(task);
                 }
@@ -2304,20 +2301,14 @@ var Gantt = (function () {
                         this.get_task(child_bar_id),
                         new_relation,
                     ]);
-                    this.refresh(this.tasks);
-                    bars.forEach((bar) => {
-                        const $bar = bar.$bar;
-                        if (!$bar.finaldx) return;
-                        bar.date_changed();
-                        bar.set_action_completed();
-                    });
-                    const updated_child_bar = this.get_bar(child_bar_id);
-                    if (updated_child_bar) {
-                        updated_child_bar.update_bar_position({
-                            x: updated_child_bar.$bar.getX(),
-                            width: updated_child_bar.$bar.getWidth(),
-                        });
-                    }
+
+                    // const updated_child_bar = this.get_bar(child_bar_id);
+                    // if (updated_child_bar) {
+                    //     updated_child_bar.update_bar_position({
+                    //         x: updated_child_bar.$bar.getX(),
+                    //         width: updated_child_bar.$bar.getWidth(),
+                    //     });
+                    // }
                 }
             });
 
