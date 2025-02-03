@@ -5,7 +5,6 @@ import Arrow from './arrow';
 import Popup from './popup';
 
 import './gantt.scss';
-import {log} from "rollup-plugin-sass/dist/utils";
 
 const VIEW_MODE = {
     QUARTER_DAY: 'Quarter Day',
