@@ -298,7 +298,6 @@ export default class Bar {
                         const x_of_end_parents = this.task.dependencies.map((dep, index) => {
                             let delay = this.task.relationship_options.delay[index] || 0;
                             let delayOffset = 0;
-                            console.log(this.gantt)
                             if (this.gantt.options.view_mode === 'Week' && delay >= 7) {
                                 delayOffset = Math.floor(delay / 7) * this.gantt.options.column_width;
                             } else if (this.gantt.options.view_mode === 'Month' && delay >= 30) {
