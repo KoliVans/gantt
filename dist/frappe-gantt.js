@@ -722,6 +722,8 @@ var Gantt = (function () {
             if (x) {
                 // get all x + width (end of bars) values of parent task
                 const x_of_end_parents = this.task.dependencies.map((dep) => {
+                    console.log(dep,this.gantt.get_bar(dep).$bar.getX() +
+                        this.gantt.get_bar(dep).$bar.getWidth());
                     return (
                         this.gantt.get_bar(dep).$bar.getX() +
                         this.gantt.get_bar(dep).$bar.getWidth()
