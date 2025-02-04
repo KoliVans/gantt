@@ -718,7 +718,7 @@ var Gantt = (function () {
 
         update_bar_position({ x = null, width = null, handle = null }) {
             const bar = this.$bar;
-            console.log(bar);
+            console.log(this.task.dependencies);
 
             if (x) {
                 // get all x + width (end of bars) values of parent task
