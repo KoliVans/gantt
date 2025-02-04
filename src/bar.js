@@ -256,8 +256,6 @@ export default class Bar {
 
     update_bar_position({ x = null, width = null, handle = null }) {
         const bar = this.$bar;
-        console.log(this.task.dependencies)
-
         if (x) {
             // get all x + width (end of bars) values of parent task
             const x_of_end_parents = this.task.dependencies.map((dep) => {

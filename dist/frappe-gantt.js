@@ -718,8 +718,6 @@ var Gantt = (function () {
 
         update_bar_position({ x = null, width = null, handle = null }) {
             const bar = this.$bar;
-            console.log(this.task.dependencies);
-
             if (x) {
                 // get all x + width (end of bars) values of parent task
                 const x_of_end_parents = this.task.dependencies.map((dep) => {
@@ -1773,10 +1771,6 @@ var Gantt = (function () {
             this.map_arrows_on_bars();
             this.set_width();
             this.set_scroll_position();
-            // this.bars.forEach((bar) => {
-            //     const x = bar.compute_x();
-            //     bar.update_bar_position({x});
-            // });
         }
 
         setup_layers() {
