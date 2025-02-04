@@ -757,18 +757,21 @@ var Gantt = (function () {
                         x_of_end_parents.sort((a, b) => a - b);
                         if (this.task.relationship_options.asap.includes(true)) {
                             // get all x + width (end of bars) values of parent task
-                            const x_of_end_parents = this.task.dependencies.map(
-                                (dep, index) => {
-                                    return (
-                                        this.gantt.get_bar(dep).$bar.getX() +
-                                        this.gantt.get_bar(dep).$bar.getWidth() +
-                                        this.task.relationship_options.delay[
-                                            index
-                                        ] *
-                                            this.gantt.options.column_width
-                                    );
+                            const x_of_end_parents = this.task.dependencies.map((dep, index) => {
+                                let delay = this.task.relationship_options.delay[index] || 0;
+                                let delayOffset = 0;
+                                console.log(this.gantt);
+                                if (this.gantt.options.view_mode === 'Week' && delay >= 7) {
+                                    delayOffset = Math.floor(delay / 7) * this.gantt.options.column_width;
+                                } else if (this.gantt.options.view_mode === 'Month' && delay >= 30) {
+                                    delayOffset = Math.floor(delay / 30) * this.gantt.options.column_width;
                                 }
-                            );
+                                return (
+                                    this.gantt.get_bar(dep).$bar.getX() +
+                                    this.gantt.get_bar(dep).$bar.getWidth() +
+                                    delayOffset
+                                );
+                            });
                             x_of_end_parents.sort((a, b) => a - b);
 
                             const valid_x = x_of_end_parents.reduce(
