@@ -132,10 +132,10 @@ export default class Bar {
         this.handles = [];
         this.handles.push(
             createSVG('rect', {
-                x: bar.getEndX() - handle_width - 1,
-                y: bar.getY() + 3,
+                x: bar.getEndX() - 3,
+                y: bar.getY(),
                 width: handle_width,
-                height: this.height - 6,
+                height: this.height,
                 rx: this.corner_radius,
                 ry: this.corner_radius,
                 class: 'handle right',
@@ -145,10 +145,10 @@ export default class Bar {
 
         this.handles.push(
             createSVG('rect', {
-                x: bar.getX() + 1,
-                y: bar.getY() + 3,
+                x: bar.getX() - 2,
+                y: bar.getY(),
                 width: handle_width,
-                height: this.height - 6,
+                height: this.height,
                 rx: this.corner_radius,
                 ry: this.corner_radius,
                 class: 'handle left',
@@ -503,10 +503,10 @@ export default class Bar {
         const bar = this.$bar;
         this.handle_group
             .querySelector('.handle.left')
-            .setAttribute('x', bar.getX() + 1);
+            .setAttribute('x', bar.getX() - 2);
         this.handle_group
             .querySelector('.handle.right')
-            .setAttribute('x', bar.getEndX() - 6);
+            .setAttribute('x', bar.getEndX() - 3);
         const handle = this.group.querySelector('.handle.progress');
         handle && handle.setAttribute('points', this.get_progress_polygon_points());
     }
