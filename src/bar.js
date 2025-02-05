@@ -259,17 +259,9 @@ export default class Bar {
         if (x) {
             // get all x + width (end of bars) values of parent task
             const x_of_end_parents = this.task.dependencies.map((dep, index) => {
-                let delay = this.task.relationship_options.delay[index] || 0;
-                let delayOffset = 0;
-                if (this.gantt.options.view_mode === 'Week' && delay >= 7) {
-                    delayOffset = Math.floor(delay / 7) * this.gantt.options.column_width;
-                } else if (this.gantt.options.view_mode === 'Month' && delay >= 30) {
-                    delayOffset = Math.floor(delay / 30) * this.gantt.options.column_width;
-                }
                 return (
                     this.gantt.get_bar(dep).$bar.getX() +
-                    this.gantt.get_bar(dep).$bar.getWidth() +
-                    delayOffset
+                    this.gantt.get_bar(dep).$bar.getWidth()
                 );
             });
             x_of_end_parents.sort((a, b) => a - b);
@@ -292,17 +284,9 @@ export default class Bar {
                 if (this.task.relationship_options.type.includes('FS')) {
                     // get all x + width (end of bars) values of parent task
                     const x_of_end_parents = this.task.dependencies.map((dep, index) => {
-                        let delay = this.task.relationship_options.delay[index] || 0;
-                        let delayOffset = 0;
-                        if (this.gantt.options.view_mode === 'Week' && delay >= 7) {
-                            delayOffset = Math.floor(delay / 7) * this.gantt.options.column_width;
-                        } else if (this.gantt.options.view_mode === 'Month' && delay >= 30) {
-                            delayOffset = Math.floor(delay / 30) * this.gantt.options.column_width;
-                        }
                         return (
                             this.gantt.get_bar(dep).$bar.getX() +
-                            this.gantt.get_bar(dep).$bar.getWidth() +
-                            delayOffset
+                            this.gantt.get_bar(dep).$bar.getWidth()
                         );
                     });
                     x_of_end_parents.sort((a, b) => a - b);
@@ -358,6 +342,7 @@ export default class Bar {
             this.update_attr(bar, 'x', x);
         }
         if (width && width >= this.gantt.options.view_mode === 'Month' ? 10 : 40) {
+        if (width && width >= (this.gantt.view_is('Month') ? 8 : 40)) {
             this.update_attr(bar, 'width', width);
         }
         this.update_label_position();
