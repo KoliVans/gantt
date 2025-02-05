@@ -294,13 +294,12 @@ export default class Bar {
                         // get all x + width (end of bars) values of parent task
                         const x_of_end_parents = this.task.dependencies.map(
                             (dep, index) => {
+                                let delayDay = this.gantt.view_is('Month') ? this.task.relationship_options.delay[index] / 30 : this.gantt.view_is('Week')
+                                    ?  this.task.relationship_options.delay[index] / 7 : this.task.relationship_options.delay[index]
                                 return (
                                     this.gantt.get_bar(dep).$bar.getX() +
                                     this.gantt.get_bar(dep).$bar.getWidth() +
-                                    this.task.relationship_options.delay[
-                                        index
-                                        ] *
-                                    this.gantt.options.column_width
+                                    delayDay * this.gantt.options.column_width
                                 );
                             });
                         x_of_end_parents.sort((a, b) => a - b);
