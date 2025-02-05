@@ -904,7 +904,6 @@ export default class Gantt {
         let odx = dx,
             rem,
             position;
-
         if (this.view_is(VIEW_MODE.WEEK)) {
             rem = dx % (this.options.column_width / 7);
             position =
