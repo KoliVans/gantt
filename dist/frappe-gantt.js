@@ -756,10 +756,6 @@ var Gantt = (function () {
                             // get all x + width (end of bars) values of parent task
                             const x_of_end_parents = this.task.dependencies.map(
                                 (dep, index) => {
-                                    console.log(this.gantt.options.column_width);
-                                    console.log(this.task.relationship_options.delay[
-                                            index
-                                            ]);
                                     let delayDay = this.gantt.view_is('Month') ? this.task.relationship_options.delay[index] / 30 : this.gantt.view_is('Week')
                                         ?  this.task.relationship_options.delay[index] / 7 : this.task.relationship_options.delay[index];
                                     return (
