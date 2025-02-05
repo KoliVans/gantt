@@ -341,7 +341,6 @@ export default class Bar {
 
             this.update_attr(bar, 'x', x);
         }
-        if (width && width >= this.gantt.options.view_mode === 'Month' ? 10 : 40) {
         if (width && width >= (this.gantt.view_is('Month') ? 8 : 40)) {
             this.update_attr(bar, 'width', width);
         }
