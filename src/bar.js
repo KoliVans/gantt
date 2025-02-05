@@ -294,12 +294,12 @@ export default class Bar {
                         // get all x + width (end of bars) values of parent task
                         const x_of_end_parents = this.task.dependencies.map(
                             (dep, index) => {
-                                let delayDay = this.gantt.view_is('Month') ? this.task.relationship_options.delay[index] / 30 : this.gantt.view_is('Week')
-                                    ?  this.task.relationship_options.delay[index] / 7 : this.task.relationship_options.delay[index]
+                                let delayDay = this.gantt.view_is('Month') ? this.gantt.options.column_width / 30 : this.gantt.view_is('Week')
+                                    ?  this.gantt.options.column_width / 7 : this.gantt.options.column_width
                                 return (
                                     this.gantt.get_bar(dep).$bar.getX() +
                                     this.gantt.get_bar(dep).$bar.getWidth() +
-                                    delayDay * this.gantt.options.column_width
+                                    this.task.relationship_options.delay[index] * delayDay
                                 );
                             });
                         x_of_end_parents.sort((a, b) => a - b);
@@ -340,7 +340,7 @@ export default class Bar {
 
             this.update_attr(bar, 'x', x);
         }
-        if (width && width >= (this.gantt.view_is('Month') ? 8 : 40)) {
+        if (width && width >= (this.gantt.view_is('Month') ? 8 : 38)) {
             this.update_attr(bar, 'width', width);
         }
         this.update_label_position();
