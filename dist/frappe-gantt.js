@@ -1570,23 +1570,11 @@ var Gantt = (function () {
                 task._start = date_utils.parse(task.start);
                 task._end = date_utils.parse(task.end);
 
-                if (!task._start || isNaN(task._start.getTime())) {
-                    task._start = date_utils.today();
-                }
-                if (!task._end || isNaN(task._end.getTime())) {
-                    task._end = date_utils.add(task._start, 2, 'day');
-                }
-
                 if (date_utils.diff(task._end, task._start, 'year') > 10) {
                     task.end = null;
                 }
 
                 task._index = i;
-
-                const task_end_values = date_utils.get_date_values(task._end);
-                if (task_end_values.slice(3).every((d) => d === 0)) {
-                    task._end = date_utils.add(task._end, 24, 'hour');
-                }
 
                 if (!task.start && !task.end) {
                     const today = date_utils.today();
@@ -1600,6 +1588,11 @@ var Gantt = (function () {
 
                 if (task.start && !task.end) {
                     task._end = date_utils.add(task._start, 2, 'day');
+                }
+
+                const task_end_values = date_utils.get_date_values(task._end);
+                if (task_end_values.slice(3).every((d) => d === 0)) {
+                    task._end = date_utils.add(task._end, 24, 'hour');
                 }
 
                 if (!task.start || !task.end) {
@@ -2292,13 +2285,13 @@ var Gantt = (function () {
                         new_relation,
                     ]);
 
-                    // const updated_child_bar = this.get_bar(child_bar_id);
-                    // if (updated_child_bar) {
-                    //     updated_child_bar.update_bar_position({
-                    //         x: updated_child_bar.$bar.getX(),
-                    //         width: updated_child_bar.$bar.getWidth(),
-                    //     });
-                    // }
+                    this.refresh(this.tasks);
+                    bars.forEach((bar) => {
+                        const $bar = bar.$bar;
+                        if (!$bar.finaldx) return;
+                        bar.date_changed();
+                        bar.set_action_completed();
+                    });
                 }
             });
 
