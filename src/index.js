@@ -1008,8 +1008,6 @@ export default class Gantt {
                 this.arrows.splice(index, 1);
             }
         });
-
-        this.refresh(this.tasks);
     }
 
     /**

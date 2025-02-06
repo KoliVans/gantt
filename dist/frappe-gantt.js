@@ -826,8 +826,6 @@ var Gantt = (function () {
                 this.task._end = new_end_date;
             }
 
-            console.log(this.task);
-
             if (!changed) return;
             this.gantt.trigger_event('date_change', [
                 this.task,
@@ -2472,14 +2470,9 @@ var Gantt = (function () {
 
         removeArrow(parent_id, child_id) {
 
-            console.log(parent_id, child_id);
-            console.log(this.arrows);
-
             let arrowsDel = this.arrows.filter(arrow =>
                 arrow.from_task.task.id === parent_id.id && arrow.to_task.task.id === child_id.id
             );
-
-            console.log(arrowsDel);
 
             arrowsDel.forEach(arrow => {
                 arrow.element.remove();
@@ -2488,12 +2481,6 @@ var Gantt = (function () {
                     this.arrows.splice(index, 1);
                 }
             });
-
-            console.log(this.arrows);
-            console.log(this.tasks);
-            arrows.update_arrow_position();
-
-            this.refresh(this.tasks);
         }
 
         /**
