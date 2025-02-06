@@ -813,12 +813,6 @@ export default class Gantt {
                 ]);
 
                 this.refresh(this.tasks);
-                bars.forEach((bar) => {
-                    const $bar = bar.$bar;
-                    if (!$bar.finaldx) return;
-                    bar.date_changed();
-                    bar.set_action_completed();
-                });
             }
         });
 

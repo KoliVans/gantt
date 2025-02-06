@@ -341,8 +341,6 @@ var Gantt = (function () {
                 parent.appendChild(elem);
             } else if (attr === 'innerHTML') {
                 elem.innerHTML = attrs.innerHTML;
-            } else if (attr === 'clipPath') {
-                elem.setAttribute('clip-path', 'url(#' + attrs[attr] + ')');
             } else {
                 elem.setAttribute(attr, attrs[attr]);
             }
@@ -720,7 +718,7 @@ var Gantt = (function () {
             const bar = this.$bar;
             if (x) {
                 // get all x + width (end of bars) values of parent task
-                const x_of_end_parents = this.task.dependencies.map((dep, index) => {
+                const x_of_end_parents = this.task.dependencies.map((dep) => {
                     return (
                         this.gantt.get_bar(dep).$bar.getX() +
                         this.gantt.get_bar(dep).$bar.getWidth()
@@ -745,12 +743,14 @@ var Gantt = (function () {
                     }
                     if (this.task.relationship_options.type.includes('FS')) {
                         // get all x + width (end of bars) values of parent task
-                        const x_of_end_parents = this.task.dependencies.map((dep, index) => {
-                            return (
-                                this.gantt.get_bar(dep).$bar.getX() +
-                                this.gantt.get_bar(dep).$bar.getWidth()
-                            );
-                        });
+                        const x_of_end_parents = this.task.dependencies.map(
+                            (dep) => {
+                                return (
+                                    this.gantt.get_bar(dep).$bar.getX() +
+                                    this.gantt.get_bar(dep).$bar.getWidth()
+                                );
+                            }
+                        );
                         x_of_end_parents.sort((a, b) => a - b);
                         if (this.task.relationship_options.asap.includes(true)) {
                             // get all x + width (end of bars) values of parent task
@@ -2286,12 +2286,6 @@ var Gantt = (function () {
                     ]);
 
                     this.refresh(this.tasks);
-                    bars.forEach((bar) => {
-                        const $bar = bar.$bar;
-                        if (!$bar.finaldx) return;
-                        bar.date_changed();
-                        bar.set_action_completed();
-                    });
                 }
             });
 
