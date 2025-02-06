@@ -342,7 +342,7 @@ export default class Bar {
 
             this.update_attr(bar, 'x', x);
         }
-        if (width && width >= (this.gantt.view_is('Month') ? 8 : 38)) {
+        if (width && width >= (this.gantt.view_is('Month') ? this.gantt.options.column_width / 30 : this.gantt.options.column_width)) {
             this.update_attr(bar, 'width', width);
         }
         this.update_label_position();
