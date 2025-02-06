@@ -2238,12 +2238,7 @@ var Gantt = (function () {
 
             $.on(this.$svg, 'mouseup', (e) => {
                 this.bar_being_dragged = null;
-                bars.forEach((bar) => {
-                    const $bar = bar.$bar;
-                    if (!$bar.finaldx) return;
-                    bar.date_changed();
-                    bar.set_action_completed();
-                });
+                this.save_all_bars(bars);
             });
             // new depen
             $.on(this.$svg, 'mouseup', '.dot', (e, element) => {
@@ -2289,6 +2284,15 @@ var Gantt = (function () {
             });
 
             this.bind_bar_progress();
+        }
+
+        save_all_bars(bars) {
+            bars.forEach((bar) => {
+                const $bar = bar.$bar;
+                if (!$bar.finaldx) return;
+                bar.date_changed();
+                bar.set_action_completed();
+            });
         }
 
         bind_bar_progress() {
