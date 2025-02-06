@@ -995,6 +995,23 @@ export default class Gantt {
         parent_element.scrollLeft = this.saved_scroll_position;
     }
 
+    removeArrow(parent_id, child_id) {
+
+        let arrowsDel = this.arrows.filter(arrow =>
+            arrow.from_task.task.id === parent_id.id && arrow.to_task.task.id === child_id.id
+        );
+
+        arrowsDel.forEach(arrow => {
+            arrow.element.remove();
+            let index = this.arrows.indexOf(arrow);
+            if (index > -1) {
+                this.arrows.splice(index, 1);
+            }
+        });
+
+        this.refresh(this.tasks);
+    }
+
     /**
      * Clear all elements from the parent svg element
      *
