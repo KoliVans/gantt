@@ -816,37 +816,20 @@ var Gantt = (function () {
             let changed = false;
             const { new_start_date, new_end_date } = this.compute_start_end_date();
 
-            function formatDate(date) {
-                return date.toISOString().split('T')[0];
-            }
-
-            console.log(new_start_date.toISOString().split('T'));
-
-            const formatted_start_date = formatDate(new_start_date);
-            const formatted_end_date = formatDate(new_end_date);
-
-            console.log("После преобразования:", formatted_start_date, formatted_end_date);
-            console.log("Исходные даты задачи:", this.task.start, this.task.end);
-
             if (Number(this.task._start) !== Number(new_start_date)) {
                 changed = true;
-                this.task.start = formatted_start_date;
                 this.task._start = new_start_date;
             }
-
             if (Number(this.task._end) !== Number(new_end_date)) {
                 changed = true;
-                this.task.end = formatted_end_date;
                 this.task._end = new_end_date;
             }
-
-            console.log(this.task);
 
             if (!changed) return;
             this.gantt.trigger_event('date_change', [
                 this.task,
                 new_start_date,
-                date_utils.add(new_end_date, -1, 'second'),
+                date_utils.add(new_end_date, -1, 'date'),
             ]);
         }
 
