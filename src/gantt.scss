@@ -11,13 +11,12 @@ $blue: #a3a3ff !default;
 $handle-color: inherit !default;
 
 .gantt {
+	-webkit-user-select: none;
+	display: block;
+    vertical-align: middle;
+    position: absolute;
 	.grid-background {
 		fill: none;
-	}
-	.grid-header {
-		fill: #ffffff;
-		stroke: $border-color;
-		stroke-width: 1.4;
 	}
 	.grid-row {
 		fill: #ffffff;
@@ -143,22 +142,6 @@ $handle-color: inherit !default;
 			}
 		}
 	}
-
-	.lower-text, .upper-text {
-		font-size: 12px;
-		text-anchor: middle;
-	}
-	.upper-text {
-		fill: $text-light;
-		position: absolute;
-		width: fit-content;
-		font-weight: 500;
-		font-size: 14px;
-	}
-	.lower-text {
-		fill: $text-color;
-	}
-
 	.hide {
 		display: none;
 	}
@@ -168,6 +151,55 @@ $handle-color: inherit !default;
 	position: relative;
 	overflow: auto;
 	font-size: 12px;
+	width: 100%;
+    border-radius: 8px;
+	line-height: 14.5px;
+
+	.grid-header {
+		background-color: #ffffff;
+		stroke: $border-color;
+		stroke-width: 1.4;
+		position: sticky;
+		top: 0;
+		z-index: 1000;
+		height: 85px;
+		border-bottom: 1px solid #e0e0e0;
+	}
+
+	.upper-header{
+		height: 45px;
+	}
+
+	.lower-header{
+		height: 30px;
+	}
+
+	.current-upper {
+		position: sticky;
+		left: 0 !important;
+		padding-left: 17px;
+		background: #fff;
+	}
+
+	.lower-text, .upper-text {
+		font-size: 12px;
+		text-anchor: middle;
+	}
+	.upper-text {
+		color: $text-light;
+		position: absolute;
+		width: fit-content;
+		font-weight: 500;
+		font-size: 14px;
+		height: 20px;
+	}
+	.lower-text {
+		font-size: 12px;
+        position: absolute;
+		color: $text-color;
+		align-content: center;
+    	text-align: center;
+	}
 
 	.popup-wrapper {
 		position: absolute;
