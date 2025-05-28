@@ -380,6 +380,8 @@ export default class Gantt {
             append_to: this.$container,
         });
 
+        console.log(this.$header, this.$container)
+
         this.$upper_header = this.create_el({
             classes: 'upper-header',
             append_to: this.$header,
