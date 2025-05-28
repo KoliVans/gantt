@@ -1502,13 +1502,7 @@ var Gantt = (function () {
 
             // CSS Selector is passed
             if (typeof element === 'string') {
-                let el = document.querySelector(element);
-                if (!el) {
-                    throw new ReferenceError(
-                        `CSS selector "${element}" could not be found in DOM`,
-                    );
-                }
-                element = el;
+                element = document.querySelector(element);
             }
 
             // get the SVGElement
@@ -1519,8 +1513,8 @@ var Gantt = (function () {
                 svg_element = element;
             } else {
                 throw new TypeError(
-                    'Frappe Gantt only supports usage of a string CSS selector,' +
-                        " HTML DOM element or SVG DOM element for the 'element' parameter",
+                    'Frappé Gantt only supports usage of a string CSS selector,' +
+                    " HTML DOM element or SVG DOM element for the 'element' parameter"
                 );
             }
 
@@ -1537,16 +1531,17 @@ var Gantt = (function () {
             }
 
             // wrapper element
-            this.$container = this.create_el({
-                classes: 'gantt-container',
-                append_to: this.$svg.parentElement,
-            });
+            this.$container = document.createElement('div');
+            this.$container.classList.add('gantt-container');
 
+            const parent_element = this.$svg.parentElement;
+            parent_element.appendChild(this.$container);
             this.$container.appendChild(this.$svg);
-            this.$popup_wrapper = this.create_el({
-                classes: 'popup-wrapper',
-                append_to: this.$container,
-            });
+
+            // popup wrapper
+            this.popup_wrapper = document.createElement('div');
+            this.popup_wrapper.classList.add('popup-wrapper');
+            this.$container.appendChild(this.popup_wrapper);
         }
 
         setup_options(options) {
