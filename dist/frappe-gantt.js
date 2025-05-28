@@ -1770,7 +1770,7 @@ var Gantt = (function () {
 
         setup_layers() {
             this.layers = {};
-            const layers = ['grid', 'date', 'arrow', 'progress', 'bar', 'details'];
+            const layers = ['grid', 'arrow', 'progress', 'bar'];
             // make group layers
             for (let layer of layers) {
                 this.layers[layer] = createSVG('g', {
@@ -1851,8 +1851,6 @@ var Gantt = (function () {
                 classes: 'grid-header',
                 append_to: this.$container,
             });
-
-            console.log(this.$header, this.$container);
 
             this.$upper_header = this.create_el({
                 classes: 'upper-header',
@@ -1950,7 +1948,9 @@ var Gantt = (function () {
         }
 
 
-         make_dates() {
+        make_dates() {
+            let upperTextElements = [];
+
             this.get_dates_to_draw().forEach((date, i) => {
                 if (date.lower_text) {
                     let $lower_text = this.create_el({
@@ -1970,11 +1970,19 @@ var Gantt = (function () {
                         append_to: this.$upper_header,
                     });
                     $upper_text.innerText = date.upper_text;
+                    upperTextElements.push($upper_text);
                 }
             });
-            this.upperTexts = Array.from(
-                this.$container.querySelectorAll('.upper-text'),
-            );
+            upperTextElements.forEach($upper_text => {
+                try {
+                    const box = $upper_text.offsetParent.clientWidth;
+                    const upTextLeft = $upper_text.offsetLeft;
+                    if (upTextLeft > box) {
+                        $upper_text.remove();
+                    }
+                } catch (e) {
+                }
+            });
         }
 
 
